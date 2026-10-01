@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía e Portal Interactivo: Tecnicaturas en Zona Oeste</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0F172A;
+            --card-bg: #1E293B;
+            --card-hover: #334155;
+            --accent-blue: #38BDF8;
+            --accent-orange: #FB923C;
+            --accent-green: #4ADE80;
+            --accent-purple: #C084FC;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        header .badge {
+            background-color: rgba(56, 189, 248, 0.1);
+            color: var(--accent-blue);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 12px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(to right, #38BDF8, #818CF8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        /* STATS BAR */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .stat-num {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-blue);
+            display: block;
+        }
+
+        .stat-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        /* GRID INSTITUCIONES */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .inst-card {
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .inst-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 12px 30px rgba(56, 189, 248, 0.15);
+            background-color: var(--card-hover);
+        }
+
+        .inst-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+        }
+
+        .card-46::before { background: var(--accent-blue); }
+        .card-88::before { background: var(--accent-orange); }
+        .card-unlam::before { background: var(--accent-green); }
+        .card-unahur::before { background: var(--accent-purple); }
+
+        .inst-type {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .inst-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .inst-location {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .click-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-top: 12px;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.88);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 800px;
+            max-height: 88vh;
+            overflow-y: auto;
+            padding: 32px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #334155;
+            border: none;
+            color: var(--text-main);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: #475569;
+        }
+
+        .modal-header h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .modal-header .modal-loc {
+            color: var(--accent-blue);
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .modal-body {
+            margin-top: 20px;
+        }
+
+        .info-block {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+        .info-block h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-block p, .info-block ul {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .info-block ul {
+            padding-left: 20px;
+            margin-top: 6px;
+        }
+
+        .modal-section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+        }
+
+        .careers-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .career-item {
+            background: #0F172A;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .career-item:hover {
+            border-color: #475569;
+            background: #182238;
+        }
+
+        .career-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .career-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+
+        .career-dur {
+            font-size: 0.8rem;
+            background: #334155;
+            color: #E2E8F0;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .career-detail {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, margin-top 0.3s ease;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .career-item.open .career-detail {
+            max-height: 350px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #334155;
+        }
+
+        /* CONCLUSION FOOTER */
+        .conclusion-box {
+            background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px;
+            margin-top: 10px;
+        }
+
+        .conclusion-box h3 {
+            font-size: 1.3rem;
+            color: var(--accent-blue);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .conclusion-box p {
+            color: #CBD5E1;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.8rem; }
+            .modal-content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <span class="badge">Trabajo Práctico Grupal • Investigación de Tecnicaturas</span>
+        <h1>Tecnicaturas en la Zona Oeste</h1>
+        <p>Portal web interactivo detallado sobre la oferta académica, sedes, infraestructura, modalidades y perfiles profesionales de las carreras cortas en La Matanza y Hurlingham.</p>
+    </header>
+
+    <!-- METRICAS / STATS -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-num">4</span>
+            <span class="stat-desc">Instituciones</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-num">100%</span>
+            <span class="stat-desc">Gestión Pública</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-num">2 a 3</span>
+            <span class="stat-desc">Años de Duración</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-num">+30</span>
+            <span class="stat-desc">Carreras de Nivel Superior</span>
+        </div>
+    </div>
+
+    <!-- TARJETAS DE INSTITUCIONES -->
+    <div class="grid-container">
+        
+        <!-- ISFDyT N° 46 -->
+        <div class="inst-card card-46" onclick="openModal('is46')">
+            <div class="inst-type"><span>ISFDyT N.º 46</span> <span>Pública</span></div>
+            <h2 class="inst-title">"2 de Abril de 1982"</h2>
+            <div class="inst-location">📍 Ramos Mejía, La Matanza</div>
+            <p style="font-size: 0.88rem; color: var(--text-muted);">Sede principal y anexo. Especializado en Turismo, Hotelería, Programación y Economía Social.</p>
+            <div class="click-hint">Toca para abrir expediente completo ➔</div>
+        </div>
+
+        <!-- ISFDyT N° 88 -->
+        <div class="inst-card card-88" onclick="openModal('is88')">
+            <div class="inst-type"><span>ISFDyT N.º 88</span> <span>Pública</span></div>
+            <h2 class="inst-title">"Paulo Freire"</h2>
+            <div class="inst-location">📍 San Justo, La Matanza</div>
+            <p style="font-size: 0.88rem; color: var(--text-muted);">Enfoque pedagógico sociocultural. Especializado en Gestión Cultural y Recreación Común.</p>
+            <div class="click-hint">Toca para abrir expediente completo ➔</div>
+        </div>
+
+        <!-- UNLaM -->
+        <div class="inst-card card-unlam" onclick="openModal('unlam')">
+            <div class="inst-type"><span>Universidad Nacional</span> <span>Pública</span></div>
+            <h2 class="inst-title">UNLaM</h2>
+            <div class="inst-location">📍 San Justo, La Matanza</div>
+            <p style="font-size: 0.88rem; color: var(--text-muted);">Macro-oferta técnica: Salud, Diseño, Comunicación, Arte, Videojuegos y Tecnología.</p>
+            <div class="click-hint">Toca para abrir expediente completo ➔</div>
+        </div>
+
+        <!-- UNAHUR -->
+        <div class="inst-card card-unahur" onclick="openModal('unahur')">
+            <div class="inst-type"><span>Universidad Nacional</span> <span>Pública</span></div>
+            <h2 class="inst-title">UNAHUR</h2>
+            <div class="inst-location">📍 Hurlingham, Prov. Bs. As.</div>
+            <p style="font-size: 0.88rem; color: var(--text-muted);">Biotecnología, Tecnología Industrial, Inteligencia Artificial y Articulación con Títulos de Grado.</p>
+            <div class="click-hint">Toca para abrir expediente completo ➔</div>
+        </div>
+
+    </div>
+
+    <!-- CONCLUSION -->
+    <div class="conclusion-box">
+        <h3>💡 Conclusión Ampliada de la Investigación</h3>
+        <p>Tras analizar la oferta educativa superior en la Zona Oeste, se evidencia una estructura pública sólida y diversa diseñada para responder a la demanda profesional de la región. Los institutos superiores terciarios (ISFDyT N.º 46 y N.º 88) brindan un perfil de formación técnica de tres años enfocado en el desarrollo local, servicios comunitarios, informática y turismo. Por su parte, las Universidades Nacionales (UNLaM y UNAHUR) expanden la propuesta hacia áreas complejas como la salud, los contenidos digitales interactivos, la inteligencia artificial, la biotecnología y la producción industrial. Además, la posibilidad de articulación con carreras universitarias de grado posiciona a las tecnicaturas como un excelente punto de partida tanto para la rápida inserción en el mercado laboral como para la continuidad académica.</p>
+    </div>
+
+    <!-- MODAL REUTILIZABLE -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">✕</button>
+            <div class="modal-header">
+                <h2 id="mTitle">Nombre Institución</h2>
+                <div class="modal-loc" id="mLoc">Ubicación</div>
+            </div>
+            <div class="modal-body">
+                
+                <!-- INFORMACION AMPLIADA DE LA INSTITUCION -->
+                <div class="info-block">
+                    <h4>🏛️ Reseña e Infraestructura de la Institución</h4>
+                    <p id="mInstInfo">Cargando información...</p>
+                </div>
+
+                <div class="info-block">
+                    <h4>🎓 Perfil del Egresado y Modalidad de Cursada</h4>
+                    <p id="mPerfilInfo">Cargando perfil...</p>
+                </div>
+
+                <div class="modal-section-title">📚 Plan de Carreras y Detalle de Tecnicaturas (Toca para expandir)</div>
+                <div class="careers-accordion" id="mCareers">
+                    <!-- Las carreras se inyectan dinámicamente -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const data = {
+            is46: {
+                title: "Instituto Superior de Formación Docente y Técnica N.º 46 '2 de Abril de 1982'",
+                loc: "📍 Sede Principal: Pueyrredón 1250 / Anexo: Pueyrredón 914, Ramos Mejía, La Matanza",
+                instInfo: "El ISFDyT N.º 46 es una institución pública de nivel superior orientada a la formación técnica y docente. Cuenta con una Sede Principal y un Anexo que permiten distribuir las actividades áulicas y prácticas. Dispone de infraestructura dedicada como biblioteca especializada, laboratorios de informática equipados para desarrollo de software y aulas acondicionadas para las prácticas profesionales.",
+                perfilInfo: "La modalidad de cursada es principalmente presencial. Formación orientada a capacitar técnicos de nivel superior en un lapso de 3 años, otorgando títulos oficiales de validez provincial y nacional con una alta demanda en los sectores turísticos, informáticos y de gestión social.",
+                careers: [
+                    { 
+                        name: "Tecnicatura en Hotelería", 
+                        dur: "3 años", 
+                        detail: "<strong>Perfil Profesional:</strong> Capacita para la administración y gestión integral de establecimientos hoteleros, de alojamiento y servicios gastronómicos. Abarca áreas de recepción, reservas, marketing hotelero, gestión de recursos humanos, control de costes y organización de servicios turísticos institucionales." 
+                    },
+                    { 
+                        name: "Tecnicatura en Turismo", 
+                        dur: "3 años", 
+                        detail: "<strong>Perfil Profesional:</strong> Orientada a la formulación de proyectos turísticos, diseño de circuitos turísticos, gestión de agencias de viajes y planificación estratégica del turismo local y regional. Los egresados pueden desempeñarse tanto en organismos públicos de turismo como en empresas privadas." 
+                    },
+                    { 
+                        name: "Tecnicatura en Guía de Turismo", 
+                        dur: "3 años", 
+                        detail: "<strong>Perfil Profesional:</strong> Prepara al estudiante para la conducción, asesoramiento e interpretación del patrimonio cultural, natural e histórico para grupos de turistas nacionales e internacionales. Incluye técnicas de grupo, comunicación, primeros auxilios, geografía e historia." 
+                    },
+                    { 
+                        name: "Tecnicatura Superior en Análisis, Desarrollo y Programación de Aplicaciones", 
+                        dur: "3 años", 
+                        detail: "<strong>Perfil Profesional:</strong> Formación en desarrollo de software, análisis de sistemas, bases de datos, lógica de programación y entornos web/móviles. Prepara profesionales capaces de resolver problemas informáticos, optimizar procesos organizacionales y programar aplicaciones eficientes." 
+                    },
+                    { 
+                        name: "Tecnicatura Superior en Economía Social para el Desarrollo Local", 
+                        dur: "3 años", 
+                        detail: "<strong>Perfil Profesional:</strong> Capacita en la gestión, asesoramiento y desarrollo de proyectos cooperativos, mutuales, PYMES comunitarias y organizaciones no gubernamentales. Se enfoca en fortalecer la economía popular y el desarrollo productivo sustentable de los municipios de la región." 
+                    }
+                ]
+            },
+            is88: {
+                title: "Instituto Superior de Formación Docente y Técnica N.º 88 'Paulo Freire'",
+                loc: "📍 San Justo, Partido de La Matanza, Buenos Aires",
+                instInfo: "El Instituto N.º 88 'Paulo Freire' es un espacio de educación superior pública comprometido con la transformación social y el desarrollo socio-cultural de la comunidad de La Matanza. Lleva el nombre del célebre pedagogo latinoamericano, reflejando su compromiso con una educación pública de calidad, inclusiva y con impacto territorial.",
+                perfilInfo: "Modalidad de cursada presencial combinada con el uso estratégico de campus y aulas virtuales como soporte pedagógico. Los egresados son profesionales preparados para desempeñarse en el ámbito público, privado, en centros culturales, clubes de barrio, ONG y organizaciones sociales de la comunidad.",
+                careers: [
+                    { 
+                        name: "Tecnicatura Superior en Gestión Cultural", 
+                        dur: "3 años", 
+                        detail: "<strong>Descripción Ampliada:</strong> Se centra en el diseño, coordinación, financiamiento y evaluación de proyectos artísticos y culturales. Durante la cursada se profundiza en políticas culturales, patrimonio de la comunidad, gestión de eventos masivos, arte contemporáneo y comunicación de iniciativas culturales. Los graduados gestionan centros culturales, museos, teatros y colectivos artísticos." 
+                    },
+                    { 
+                        name: "Tecnicatura Superior en Tiempo Libre y Recreación", 
+                        dur: "3 años", 
+                        detail: "<strong>Descripción Ampliada:</strong> Capacita profesionales para intervenir en procesos recreativos, lúdicos e institucionales. Se abordan contenidos sobre dinámicas de grupo, psicología del juego, proyectos sociocomunitarios y recreación en el ámbito escolar, hospitalario o de la tercera edad, promoviendo el bienestar integral y el acceso al tiempo libre." 
+                    }
+                ]
+            },
+            unlam: {
+                title: "Universidad Nacional de La Matanza (UNLaM)",
+                loc: "📍 Florencio Varela 1903, San Justo, La Matanza, Buenos Aires",
+                instInfo: "La UNLaM es uno de los centros universitarios públicos más importantes del país, con un campus moderno dotado de laboratorios de alta tecnología, estudios de radio y televisión, bibliotecas físicas y digitales, auditorios y complejos deportivos. Ofrece una infraestructura universitaria integral para la formación multidisciplinaria.",
+                perfilInfo: "Modalidad adaptada a cada especialidad (presencial, semipresencial o virtual). La oferta de tecnicaturas universitarias abarca desde la salud y la tecnología avanzada hasta la comunicación estratégica y el arte digital, otorgando títulos universitarios de nivel superior.",
+                careers: [
+                    { 
+                        name: "Tecnicatura en Anatomía Patológica", 
+                        dur: "3 años", 
+                        detail: "<strong>Área Salud:</strong> Capacita para asistir a patólogos en el procesamiento, tinción y preparación de muestras de tejidos y citologías en laboratorios de hospitales y centros médicos diagnósticos." 
+                    },
+                    { 
+                        name: "Tecnicatura en Diseño Gráfico y Digital", 
+                        dur: "2.5 años", 
+                        detail: "<strong>Área Diseño:</strong> Enfocada en comunicación visual, identidad de marca, tipografía, maquetación editorial y diseño de experiencias para entornos digitales y web." 
+                    },
+                    { 
+                        name: "Tecnicatura Universitaria en Seguros", 
+                        dur: "2 años", 
+                        detail: "<strong>Área Negocios:</strong> Formación en análisis de riesgos, contratos de seguro, legislación aseguradora y comercialización en el mercado patrimonial y personal." 
+                    },
+                    { 
+                        name: "Agente de Propaganda Médica (APM)", 
+                        dur: "2 años", 
+                        detail: "<strong>Área Salud y Comercial:</strong> Asesoramiento, comunicación y promoción ética de especialidades medicinales ante profesionales de la medicina e instituciones sanitarias." 
+                    },
+                    { 
+                        name: "Tecnicatura Universitaria en Publicidad y Comunicación Estratégica", 
+                        dur: "2.5 años", 
+                        detail: "<strong>Área Comunicación:</strong> Planificación de campañas publicitarias, investigación de mercados, gestión de marcas (branding) y selección de canales de difusión." 
+                    },
+                    { 
+                        name: "Tecnicatura Universitaria en Ceremonial y Protocolo", 
+                        dur: "3 años", 
+                        detail: "<strong>Área Institucional:</strong> Organización de actos institucionales, etiqueta corporativa, diplomacia, orden de precedencia y gestión de eventos masivos." 
+                    },
+                    { 
+                        name: "Tecnicatura en Guion Audiovisual", 
+                        dur: "2.5 años", 
+                        detail: "<strong>Área Arte y Medios:</strong> Desarrollo de proyectos narrativos, estructura dramática y escritura de scripts para cine, televisión, ficción y formatos digitales." 
+                    },
+                    { 
+                        name: "Tecnicatura en Artes Escénicas", 
+                        dur: "2.5 años", 
+                        detail: "<strong>Área Arte:</strong> Formación práctica en actuación, expresión corporal, dirección escénica, montaje y gestión de producciones teatrales." 
+                    },
+                    { 
+                        name: "Tecnicatura en Artes Audiovisuales", 
+                        dur: "2.5 años", 
+                        detail: "<strong>Área Arte y Medios:</strong> Operación técnica de cámaras, iluminación, edición digital, sonido directo y postproducción de piezas audiovisuales." 
+                    },
+                    { 
+                        name: "Tecnicatura en Animación y Arte Digital", 
+                        dur: "2.5 años", 
+                        detail: "<strong>Área Tecnología y Arte:</strong> Creación de animaciones 2D y 3D, ilustración digital, modelado tridimensional y efectos visuales (VFX)." 
+                    },
+                    { 
+                        name: "Tecnicatura en Periodismo Deportivo Integral", 
+                        dur: "2.5 años", 
+                        detail: "<strong>Área Comunicación:</strong> Cobertura periodística de disciplinas deportivas, redacción de noticias, transmisión radial/televisiva y gestión de medios deportivos." 
+                    },
+                    { 
+                        name: "Locutor Nacional", 
+                        dur: "3 años", 
+                        detail: "<strong>Área Medios:</strong> Formación técnica y foniátrica con habilitación oficial para locución comercial, conducción de radio, televisión y plataformas digitales." 
+                    },
+                    { 
+                        name: "Tecnicatura Universitaria en Psicopedagogía", 
+                        dur: "2.5 años", 
+                        detail: "<strong>Área Educación/Salud:</strong> Acompañamiento en procesos de aprendizaje, detección de dificultades cognitivas y colaboración institucional educativa." 
+                    },
+                    { 
+                        name: "Tecnicatura Universitaria en Producción de Contenidos para la Comunicación", 
+                        dur: "2.5 años", 
+                        detail: "<strong>Área Comunicación:</strong> Generación de estrategias transmedia, redacción de contenidos digitales, gestión de comunidades virtuales y medios interactivos." 
+                    },
+                    { 
+                        name: "Tecnicatura Universitaria en Desarrollo de Videojuegos", 
+                        dur: "2.5 años", 
+                        detail: "<strong>Área Tecnología Interactiva:</strong> Programación en motores gráficos (Unity/Unreal), diseño de mecánicas de juego, IA para videojuegos y arquitectura interactiva." 
+                    },
+                    { 
+                        name: "Tecnicatura en Diseño de Espacios Virtuales y Realidad Aumentada", 
+                        dur: "2.5 años", 
+                        detail: "<strong>Área Innovación Tecnológica:</strong> Modelado inmersivo 3D, desarrollo de entornos de Realidad Virtual (VR) y aplicaciones de Realidad Aumentada (AR)." 
+                    }
+                ]
+            },
+            unahur: {
+                title: "Universidad Nacional de Hurlingham (UNAHUR)",
+                loc: "📍 Hurlingham, Provincia de Buenos Aires",
+                desc: "Universidad pública nacional en constante crecimiento que articula sus carreras a través de institutos especializados: Biotecnología, Tecnología e Ingeniería, Educación y Salud. Su infraestructura de laboratorios e industria permite un aprendizaje de carácter práctico.",
+                instInfo: "La UNAHUR destaca por su moderna infraestructura de laboratorios tecnológicos y biotecnológicos. Su modelo educativo integra la investigación aplicada con el desarrollo socioproductivo de la región.",
+                perfilInfo: "Modalidad presencial con apoyo en plataformas virtuales. Una de las características principales de la UNAHUR es la <strong>articulación con títulos de grado</strong>: los egresados de sus tecnicaturas universitarias pueden continuar cursando materias para obtener Licenciaturas o Ingenierías en la misma universidad.",
+                careers: [
+                    { 
+                        name: "Tecnicatura Universitaria en Producción Agroecológica Periurbana", 
+                        dur: "2.5 años", 
+                        detail: "<strong>Biotecnología:</strong> Diseño y gestión de sistemas agrícolas sostenibles libres de agroquímicos en franjas periurbanas, fomentando la soberanía alimentaria." 
+                    },
+                    { 
+                        name: "Tecnicatura Universitaria en Viverismo", 
+                        dur: "2.5 años", 
+                        detail: "<strong>Biotecnología:</strong> Producción y propagación vegetal, sanidad de cultivos, diseño y administración comercial de viveros de especies ornamentales, forestales y autóctonas." 
+                    },
+                    { 
+                        name: "Tecnicatura Universitaria en Laboratorios", 
+                        dur: "2.5 años", 
+                        detail: "<strong>Biotecnología:</strong> Operación de instrumental científico avanzado, técnicas de análisis químico y biológico, y aplicación de normas de bioseguridad en laboratorios." 
+                    },
+                    { 
+                        name: "Tecnicatura Universitaria en Tecnología de los Alimentos", 
+                        dur: "2.5 años", 
+                        detail: "<strong>Biotecnología:</strong> Control microbiológico, aseguramiento de la calidad, conservación e industrialización de alimentos bajo normativas de higiene." 
+                    },
+                    { 
+                        name: "Tecnicatura Universitaria en Ciencias del Ambiente", 
+                        dur: "2.5 años", 
+                        detail: "<strong>Biotecnología:</strong> Monitoreo ambiental, evaluación de impacto ecológico, tratamiento de residuos y políticas de conservación sustentable." 
+                    },
+                    { 
+                        name: "Tecnicaturas en Tecnología e Ingeniería (Oferta Ampliada)", 
+                        dur: "2 a 2.5 años", 
+                        detail: "<strong>Área Industrial y Tecnológica:</strong> Incluye formación especializada en <em>Programación</em>, <em>Inteligencia Artificial</em>, <em>Redes y Operaciones Informáticas</em>, <em>Programación de Videojuegos</em>, <em>Energía Eléctrica</em>, <em>Electromovilidad</em>, <em>Metalurgia</em>, <em>Mantenimiento Industrial</em>, <em>Mantenimiento Hospitalario</em> y <em>Diseño Industrial</em>." 
+                    },
+                    { 
+                        name: "Prácticas Socioeducativas (Educación y Lenguas)", 
+                        dur: "2 a 2.5 años", 
+                        detail: "<strong>Área Educativa:</strong> Tecnicaturas de apoyo pedagógico e intervención social en áreas de <em>Inglés</em>, <em>Chino</em>, <em>Biología</em>, <em>Matemática</em>, version socioeducativa de <em>Geografía</em>, <em>Educación Física</em> y <em>Escritura y Lectura</em>." 
+                    }
+                ]
+            }
+        };
+
+        function openModal(id) {
+            const inst = data[id];
+            document.getElementById('mTitle').innerText = inst.title;
+            document.getElementById('mLoc').innerText = inst.loc;
+            document.getElementById('mInstInfo').innerHTML = inst.instInfo;
+            document.getElementById('mPerfilInfo').innerHTML = inst.perfilInfo;
+
+            const careersContainer = document.getElementById('mCareers');
+            careersContainer.innerHTML = '';
+
+            inst.careers.forEach(c => {
+                const item = document.createElement('div');
+                item.className = 'career-item';
+                item.onclick = function(e) {
+                    e.stopPropagation();
+                    this.classList.toggle('open');
+                };
+
+                item.innerHTML = `
+                    <div class="career-item-header">
+                        <span class="career-name">${c.name}</span>
+                        <span class="career-dur">${c.dur}</span>
+                    </div>
+                    <div class="career-detail">${c.detail}</div>
+                `;
+                careersContainer.appendChild(item);
+            });
+
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        function closeModalOnOverlay(e) {
+            if (e.target.id === 'modalOverlay') {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
